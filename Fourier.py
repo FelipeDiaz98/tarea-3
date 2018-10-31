@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.fftpack import fftfreq
+from scipy import interpolate
 
 #parte a
 incompletos = np.genfromtxt("incompletos.dat", delimiter = ",")
@@ -28,7 +29,8 @@ def fourier(f):
 		F.append(R)
 	return F
 
-F = abs(np.real(fourier(signal[:,1])))
+F = fourier(signal[:,1])
+F0 = abs(np.real(F))
 
 #parte d
 n = len(signal[:,0])
@@ -36,7 +38,7 @@ dt = ((signal[:,0])[-1] - (signal[:,0])[0])/n
 freq = fftfreq(n,dt)
 
 plt.figure()
-plt.plot(freq, F, label = "Transformada")
+plt.plot(freq, F0, label = "Transformada")
 plt.legend(loc = "best")
 plt.xlabel("Frecuencia")
 plt.ylabel("Amplitud")
@@ -57,7 +59,6 @@ F = filtro(F,freq,1000)
 f = np.real(np.fft.ifft(F))
 plt.figure()
 plt.plot(signal[:,0], f, label = "senial filtrada")
-plt.plot(signal[:,0], signal[:,1], label = "senial sin filtrar")
 plt.legend(loc = "best")
 plt.xlabel("Tiempo")
 plt.ylabel("Amplitud")
@@ -69,6 +70,57 @@ plt.savefig("DiazFelipe_filtrada.pdf")
 
 
 #parte h
+
+def interpolacion(datos,array):
+	x = datos[:,0]
+	y = datos[:,1]
+	cuadratica = interpolate.interp1d(x,y,kind = "quadratic")
+	cubica = interpolate.interp1d(x,y,kind = "cubic")
+	funfcuadratica = cuadratica(array)
+	funfcubica = cubica(array)
+	return funfcuadratica, funfcubica	
+
+
+array = np.linspace((incompletos[:,0])[0], (incompletos[:,0])[-1], 512)
+cuadratica, cubica = interpolacion(incompletos, array)
+
+cuad = fourier(cuadratica)
+cuad0 = abs(np.real(cuad))
+cub = fourier(cubica)
+cub0 = abs(np.real(cub))
+
+#parte i
+
+n2 = len(array)
+dt2 = (array[-1] - array[0])/n2
+freq2 = fftfreq(n2,dt2)
+
+plt.figure()
+plt.subplot(311)
+plt.plot(freq, F0, label = "senial original")
+plt.legend(loc = "best")
+plt.xlabel("Frecuencia")
+plt.ylabel("Amplitud")
+plt.title("Transformada de senial original")
+plt.subplot(312)
+plt.plot(freq2, cuad0, label = "interpola cuadratica")
+plt.legend(loc = "best")
+plt.xlabel("Frecuencia")
+plt.ylabel("Amplitud")
+plt.title("Transformada de interpolacion cuadratica")
+plt.subplot(313)
+plt.plot(freq2, cub0, label = "transformada")
+plt.legend(loc = "best")
+plt.xlabel("Frecuencia")
+plt.ylabel("Amplitud")
+plt.title("Transformada de interpolacion cubica")
+plt.savefig("DiazFelipe_TF_interpola.pdf")
+
+
+
+
+
+
 
 
 
