@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.fftpack import fftfreq
 from matplotlib.colors import LogNorm
+import math
 
 #parte a
 
@@ -12,8 +13,10 @@ datos = plt.imread("arbol.png")
 plt.figure()
 F = np.fft.fft2(datos)
 Fs = np.fft.fftshift(F)
-plt.imshow(abs(Fs), cmap = "Blues")
+plt.imshow(math.log10(abs(Fs)))
 plt.savefig("DiazFelipe_FT2D.pdf")
+
+#parte c
 
 def filtro(F):
 	for i in range(len(F)):
@@ -23,20 +26,16 @@ def filtro(F):
 	return F
 
 Ff = filtro(F)
+
+#parte d
+
 Ffs = np.fft.fftshift(Ff)
 plt.figure()
-plt.imshow(abs(Ffs), cmap = "Blues", norm = LogNorm())
-plt.show()
+plt.imshow(abs(Ffs), norm = LogNorm())
+plt.savefig("DiazFelipe_FT2D_filtrada.pdf")
 
-imagen_0 = np.fft.ifft2(Ff)
-imagen=np.array(imagen_0)
-plt.imsave("filtrada.png", np.real(imagen), cmap="gray")
+#parte e
 
-
-
-
-
-
-
-
+imagen = np.fft.ifft2(Ff)
+plt.imsave("DiazFelipe_Imagen_filtrada.pdf", np.real(imagen), cmap="gray")
 
