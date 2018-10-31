@@ -4,10 +4,12 @@ from scipy.fftpack import fftfreq
 from scipy import interpolate
 
 #parte a
+
 incompletos = np.genfromtxt("incompletos.dat", delimiter = ",")
 signal = np.genfromtxt("signal.dat", delimiter = ",")
 
 #parte b
+
 plt.figure()
 plt.plot(signal[:,0], signal[:,1], label = "Senial")
 plt.legend(loc = "best")
@@ -17,6 +19,7 @@ plt.title("Grafica de los datos de la senial")
 plt.savefig("DiazFelipe_signal.pdf")
 
 #parte c
+
 def fourier(f):
 	F = []
 	n = len(f)
@@ -30,9 +33,10 @@ def fourier(f):
 	return F
 
 F = fourier(signal[:,1])
-F0 = abs(np.real(F))
 
 #parte d
+
+F0 = abs(np.real(F))
 n = len(signal[:,0])
 dt = ((signal[:,0])[-1] - (signal[:,0])[0])/n
 freq = fftfreq(n,dt)
@@ -46,9 +50,11 @@ plt.title("Grafica de la transformada de Fourier de la senial")
 plt.savefig("DiazFelipe_TF.pdf")
 
 #parte e
+
 print "Las frecuencias principales se encuentran aproximadamente en 0, 139.667, 210.042 y 385.255 Hz, cabe aclarar que cada uno de los picos tiene un 'reflejo' en la parte negativa del eje x con los mismos valores, pero estos son los mismos picos mencionados anteriormente."
 
 #parte f 
+
 def filtro(F,freq,c):
 	for i in range (len(freq)):
 		if (abs(freq[i]) > c):
@@ -67,7 +73,7 @@ plt.savefig("DiazFelipe_filtrada.pdf")
 
 #parte g
 
-
+print "TERMINAR."
 
 #parte h
 
@@ -80,16 +86,16 @@ def interpolacion(datos,array):
 	funfcubica = cubica(array)
 	return funfcuadratica, funfcubica	
 
-
 array = np.linspace((incompletos[:,0])[0], (incompletos[:,0])[-1], 512)
-cuadratica, cubica = interpolacion(incompletos, array)
+cuad, cub = interpolacion(incompletos, array)
 
-cuad = fourier(cuadratica)
-cuad0 = abs(np.real(cuad))
-cub = fourier(cubica)
-cub0 = abs(np.real(cub))
+cuad = fourier(cuad)
+cub = fourier(cub)
 
 #parte i
+
+cuad0 = abs(np.real(cuad))
+cub0 = abs(np.real(cub))
 
 n2 = len(array)
 dt2 = (array[-1] - array[0])/n2
@@ -104,13 +110,13 @@ plt.xlabel("Frecuencia")
 plt.ylabel("Amplitud")
 plt.title("Transformada de senial original")
 plt.subplot(312)
-plt.plot(freq2, cuad0, label = "interpola cuadratica")
+plt.plot(freq2, cuad0, label = "interpol cuadratica")
 plt.legend(loc = "best")
 plt.xlabel("Frecuencia")
 plt.ylabel("Amplitud")
 plt.title("Transformada de interpolacion cuadratica")
 plt.subplot(313)
-plt.plot(freq2, cub0, label = "transformada")
+plt.plot(freq2, cub0, label = "interpol cubica")
 plt.legend(loc = "best")
 plt.xlabel("Frecuencia")
 plt.ylabel("Amplitud")
@@ -131,7 +137,10 @@ F1000 = np.real(np.fft.ifft(filtro(F, freq, 1000)))
 cuad1000 = np.real(np.fft.ifft(filtro(cuad, freq2, 1000)))
 cub1000 = np.real(np.fft.ifft(filtro(cub, freq2, 1000)))
 
+#parte l
+
 plt.figure()
+plt.subplots_adjust(hspace=0.5)
 plt.subplot(211)
 plt.plot(array, F500, label = "senial original")
 plt.plot(array, cuad500, label = "interpol cuadratica")
@@ -149,22 +158,4 @@ plt.xlabel("Tiempo")
 plt.ylabel("Amplitud")
 plt.title("Senial filtrada con pasabajos de 1000 Hz")
 plt.savefig("DiazFelipe_2Filtros.pdf")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
