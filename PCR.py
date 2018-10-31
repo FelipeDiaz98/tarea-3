@@ -1,13 +1,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-#datos = wget.download("http://ftp.cs.wisc.edu/math-prog/cpo-dataset/machine-learn/cancer/WDBC/WDBC.dat")
-
 #parte a
+
 datos = np.genfromtxt("datos.dat", delimiter = ",", usecols=(2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31))
 diagnostico = np.genfromtxt("datos.dat", delimiter = ",", usecols = 1, dtype = "string")
 
 #parte b
+
 arr = []
 for i in range (len(datos[0])):
 	A=[]
@@ -25,6 +25,7 @@ arr = np.array(arr)
 print arr
 
 #parte c
+
 valores, vectores = np.linalg.eig(arr)
 
 for i in range(3):
@@ -64,9 +65,11 @@ for i in range(3):
 		print vectores[(i*10)+j]
 
 #parte d
+
 print "Las dos componentes mas importantes son mean radius y mean texture que corresponde a las primeras dos columnas de los datos."
 
 #parte e
+
 PC1 = np.dot(datos, vectores[0])
 PC2 = np.dot(datos, vectores[1])
 
@@ -74,6 +77,7 @@ mx = []
 my = []
 bx = []
 by = []
+
 for i in range(len(diagnostico)):	
 	if (diagnostico[i] == "M"):
 		mx.append(PC1[i])
@@ -92,16 +96,6 @@ plt.title("Diagnostico en funcion de las dos componentes principales")
 plt.savefig("DiazFelipe_PCA.pdf")
 
 #parte f
+
 print "Creo que el metodo si sirve para poder ayudar al diagnostico de si el paciente tiene un tumor benigno o maligno, cuando se mira la grafica de las dos componentes principales, pareciera que la mayoria de los datos van en diagonal mostrando una relacion inversamente proporcional entre las dos variables, se podria sacar una linea de ajuste lineal entre las dos variables y ver en que parte de la linea esta el paciente: la superior izquiera significa que el paciente no tiene cancer, y la inferior derecha significa que el paciente tiene cancer, aunque cabe aclarar que dicho ajuste seria mas preciso entre mas a los extremos este el paciente, donde pareciera que el metodo tiene menos fallas (diagnosticos que no sean acordes a esta aproximacion), ya que en la parte donde se unen ambas mitades (los resultados benignos y malignos) no estaria muy claro si la persona tiene o no cancer ya que hay algunos datos en dicho punto que no siguen esta aproximacion de manera tan exacta. Para mejorar el metodo se podrian tomar muchos mas datos con el fin de hacer mas claro lo que pasa en el punto donde se unen ambos diagnosticos, y ver si se podria aumentar la exactitud del metodo al reducir esta franja de incertidumbre."
-
-
-
-
-
-
-
-
-
-
-
 
