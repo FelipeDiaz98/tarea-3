@@ -96,6 +96,7 @@ dt2 = (array[-1] - array[0])/n2
 freq2 = fftfreq(n2,dt2)
 
 plt.figure()
+plt.subplots_adjust(hspace=0.8)
 plt.subplot(311)
 plt.plot(freq, F0, label = "senial original")
 plt.legend(loc = "best")
@@ -115,6 +116,39 @@ plt.xlabel("Frecuencia")
 plt.ylabel("Amplitud")
 plt.title("Transformada de interpolacion cubica")
 plt.savefig("DiazFelipe_TF_interpola.pdf")
+
+#parte j
+
+print "Se ve en la grafica de las dos interpolaciones que ambas eliminan parte de la senial, eliminando asi el pico que tiene mayor frecuencia (de los picos que antes se describieron como principales), ademas de eso, ambas interpolaciones eliminan la mayor parte del ruido que tenia la senial original, aunque la cuadratica elimina mejor las frecuencias altas y la cuadratica elimina mejor un pequenio range de frecuencias mas bajas, por lo que posiblemente el ajuste cuadratico es mejor para la senial, y el pico que es eliminado era ruido tambien pero de mucha menor frecuencia por lo que el filtro no lo detectaba sin quitar informacion de la senial."
+
+#parte k
+
+F500 = np.real(np.fft.ifft(filtro(F, freq, 500)))
+cuad500 = np.real(np.fft.ifft(filtro(cuad, freq2, 500)))
+cub500 = np.real(np.fft.ifft(filtro(cub, freq2, 500)))
+
+F1000 = np.real(np.fft.ifft(filtro(F, freq, 1000)))
+cuad1000 = np.real(np.fft.ifft(filtro(cuad, freq2, 1000)))
+cub1000 = np.real(np.fft.ifft(filtro(cub, freq2, 1000)))
+
+plt.figure()
+plt.subplot(211)
+plt.plot(array, F500, label = "senial original")
+plt.plot(array, cuad500, label = "interpol cuadratica")
+plt.plot(array, cub500, label = "interpol cubica")
+plt.legend(loc = "best")
+plt.xlabel("Tiempo")
+plt.ylabel("Amplitud")
+plt.title("Senial filtrada con pasabajos de 500 Hz")
+plt.subplot(212)
+plt.plot(array, F1000, label = "senial original")
+plt.plot(array, cuad1000, label = "interpol cuadratica")
+plt.plot(array, cub1000, label = "interpol cubica")
+plt.legend(loc = "best")
+plt.xlabel("Tiempo")
+plt.ylabel("Amplitud")
+plt.title("Senial filtrada con pasabajos de 1000 Hz")
+plt.savefig("DiazFelipe_2Filtros.pdf")
 
 
 
